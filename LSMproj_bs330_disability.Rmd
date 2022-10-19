@@ -1,0 +1,90 @@
+---
+title: "LSMproj_Disability_bs330"
+author: "Bharathprasad Sivaprasad"
+date: "12/12/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+df_disability <- read_excel(here('disability.xlsx'))
+
+```
+
+```{r}
+dis_df1 <- 
+  df_disability %>% 
+  mutate(Disability = factor(Disability))
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+```{r}
+disabled_df <- 
+  dis_df1 %>% 
+  filter(Disability == "disabled")
+```
+
+```{r}
+not_disabled_df <- 
+  dis_df1 %>% 
+  filter(Disability == "not disabled")
+```
+
+
+```{r results='hide', fig.show='hide'}
+d1 <- lm(Users ~ Year + Disability, data = dis_df1)
+#m1_1 <- lm(internet_users_total ~ Year + Age, data = workbook1)
+summary(d1)
+```
+```{r results='hide', fig.show='hide'}
+d_dis <- lm(Users ~ Year, data = disabled_df)
+summary(d_dis)
+
+
+
+plot(disabled_df$Users~disabled_df$Year) + abline(d_dis)
+
+
+gg_dis <- ggplot(disabled_df, aes(x=Year ,y=Users)) + geom_point(size=2.2) + geom_abline(slope = coef(d_dis)[[2]], intercept = coef(d_dis)[[1]], colour="blue")
+gg_dis + ggtitle("Internet User Graph - Equality Act Disabled") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(d_dis, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+
+```{r results='hide', fig.show='hide'}
+d_nt_dis <- lm(Users ~ Year, data = not_disabled_df)
+summary(d_nt_dis)
+
+
+
+plot(not_disabled_df$Users~not_disabled_df$Year) + abline(d_nt_dis)
+
+
+gg_not_dis <- ggplot(not_disabled_df, aes(x=Year ,y=Users)) + geom_point(size=2.2) + geom_abline(slope = coef(d_nt_dis)[[2]], intercept = coef(d_nt_dis)[[1]], colour="blue")
+gg_not_dis + ggtitle("Internet User Graph - Not Equality Act Disabled") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(d_nt_dis, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```

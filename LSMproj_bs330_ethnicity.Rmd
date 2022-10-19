@@ -1,0 +1,214 @@
+---
+title: "LSMproj_bs330"
+author: "Bharathprasad Sivaprasad"
+date: "12/12/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+df <- read_excel(here('internet_users_ethnicity.xlsx'))
+```
+
+```{r}
+df1 <- 
+  df %>% 
+  mutate(Ethnicity_grp = factor(Ethnicity))
+```
+
+```{r}
+df2 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "White")
+```
+
+```{r}
+df3 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Mixed/multiple ethnic background")
+
+df4 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Indian")
+
+df5 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Pakistani")
+
+df6 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Bangladeshi")
+
+df7 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Chinese")
+
+df8 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Other Asian background")
+
+df9 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Black/African/Caribbean/Black British")
+
+df10 <- 
+  df1 %>% 
+  filter(Ethnicity_grp == "Other ethnic group")
+```
+
+```{r results='hide', fig.show='hide'}
+m1_eth <- lm(Users ~ Year + Ethnicity_grp, data = df1)
+summary(m1_eth)
+```
+
+```{r results='hide', fig.show='hide'}
+m1_white <- lm(Users ~ Year, data = df2)
+summary(m1_white)
+
+plot(df2$Users~df2$Year) + abline(m1_white)
+#hist(residuals(m1_white))
+#ggplot(data = df2) + 
+ # geom_histogram(aes(Users), binwidth = 0.2)
+
+#confint(m1_white)
+
+#gg_white <- ggplot(df2, aes(x = Year, y = Users)) +
+ #           geom_point() +
+  #          geom_smooth(method="lm")+
+  #labs(title="Internet User Graph for Ethnic Group - White", x="Year", y="User Count")
+
+#gg_white + ggtitle("Internet User Graph - White") + xlab("Years") + ylab("User Count") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+gg_white <- ggplot(df2, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_white)[[2]], intercept = coef(m1_white)[[1]], colour="blue")
+
+gg_white + ggtitle("Internet User Graph - White") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_white, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+
+```{r results='hide', fig.show='hide'}
+m1_mixed <- lm(Users ~ Year, data = df3)
+summary(m1_mixed)
+
+plot(df3$Users~df3$Year) + abline(m1_mixed)
+
+gg_mixed <- ggplot(df3, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_mixed)[[2]], intercept = coef(m1_mixed)[[1]], colour="blue")
+
+gg_mixed + ggtitle("Internet User Graph -  Mixed/multiple ethnic background 
+") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_mixed, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_indian <- lm(Users ~ Year, data = df4)
+summary(m1_indian)
+
+plot(df4$Users~df4$Year) + abline(m1_indian)
+
+gg_indian <- ggplot(df4, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_indian)[[2]], intercept = coef(m1_indian)[[1]], colour="blue")
+
+gg_indian + ggtitle("Internet User Graph -  Indian 
+") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_indian, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_pakistani <- lm(Users ~ Year, data = df5)
+summary(m1_pakistani)
+
+plot(df5$Users~df5$Year) + abline(m1_pakistani)
+
+gg_pak <- ggplot(df5, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_pakistani)[[2]], intercept = coef(m1_pakistani)[[1]], colour="blue")
+
+gg_pak + ggtitle("Internet User Graph -  Pakistani 
+") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_pakistani, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_ban <- lm(Users ~ Year, data = df6)
+summary(m1_ban)
+
+plot(df6$Users~df6$Year) + abline(m1_ban)
+
+gg_ban <- ggplot(df6, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_ban)[[2]], intercept = coef(m1_ban)[[1]], colour="blue")
+
+gg_ban + ggtitle("Internet User Graph -  Bangladeshi 
+") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_ban, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_chinese <- lm(Users ~ Year, data = df7)
+summary(m1_chinese)
+
+plot(df7$Users~df7$Year) + abline(m1_chinese)
+
+gg_chinese <- ggplot(df7, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_chinese)[[2]], intercept = coef(m1_chinese)[[1]], colour="blue")
+
+gg_chinese + ggtitle("Internet User Graph -  Chinese 
+") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_chinese, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_asian <- lm(Users ~ Year, data = df8)
+summary(m1_asian)
+
+plot(df8$Users~df8$Year) + abline(m1_asian)
+
+gg_asian <- ggplot(df8, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_asian)[[2]], intercept = coef(m1_asian)[[1]], colour="blue")
+
+gg_asian + ggtitle("Internet User Graph -   Other Asian background") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_asian, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_black <- lm(Users ~ Year, data = df9)
+summary(m1_black)
+
+plot(df9$Users~df9$Year) + abline(m1_black)
+
+gg_black <- ggplot(df9, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_black)[[2]], intercept = coef(m1_black)[[1]], colour="blue")
+
+gg_black + ggtitle("Internet User Graph - Black/African/Caribbean/Black British 
+") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_black, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_other <- lm(Users ~ Year, data = df10)
+summary(m1_other)
+
+plot(df10$Users~df10$Year) + abline(m1_other)
+
+gg_other <- ggplot(df10, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_other)[[2]], intercept = coef(m1_other)[[1]], colour="blue")
+
+gg_other + ggtitle("Internet User Graph - Other ethnic group 
+") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.5"))
+
+predict(m1_other, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

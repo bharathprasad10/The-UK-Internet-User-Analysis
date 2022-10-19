@@ -1,0 +1,168 @@
+---
+title: "Linear Statistical Model - Project"
+author: "Bharathprasad Sivaprasad"
+date: "8/12/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read the necessary packages
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+```
+
+Reading data of first workbook with internet users and non users based on age-group only.
+
+```{r}
+workbook1 <- read_excel(here('internet_users.xlsx'))
+```
+
+```{r}
+workbook1_1 <- 
+  workbook1 %>% 
+  mutate(age_grp = factor(Age))
+
+workbook1_2 <- 
+  workbook1_1 %>% 
+  filter(Age == 16)
+
+workbook1_3 <- 
+  workbook1_1 %>% 
+  filter(Age == 25)
+
+workbook1_4 <- 
+  workbook1_1 %>% 
+  filter(Age == 35)
+
+workbook1_5 <- 
+  workbook1_1 %>% 
+  filter(Age == 45)
+
+workbook1_6 <- 
+  workbook1_1 %>% 
+  filter(Age == 55)
+
+workbook1_7 <- 
+  workbook1_1 %>% 
+  filter(Age == 65)
+
+workbook1_8 <- 
+  workbook1_1 %>% 
+  filter(Age == 75)
+```
+
+Linear regression
+```{r results='hide', fig.show='hide'}
+m1_1 <- lm(internet_users_total ~ Year + age_grp, data = workbook1_1)
+#m1_1 <- lm(internet_users_total ~ Year + Age, data = workbook1)
+summary(m1_1)
+```
+```{r}
+par(mfrow=c(2,2))
+plot(m1_1)
+```
+```{r results='hide', fig.show='hide'}
+m1_16 <- lm(internet_users_total ~ Year , data = workbook1_2)
+summary(m1_16)
+
+predict(m1_16, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+
+```{r}
+m1_25 <- lm(internet_users_total ~ Year, data = workbook1_3)
+m1_35 <- lm(internet_users_total ~ Year, data = workbook1_4)
+m1_45 <- lm(internet_users_total ~ Year, data = workbook1_5)
+m1_55 <- lm(internet_users_total ~ Year, data = workbook1_6)
+m1_65 <- lm(internet_users_total ~ Year, data = workbook1_7)
+m1_75 <- lm(internet_users_total ~ Year, data = workbook1_8)
+
+```
+
+```{r}
+#anova(m1_1)
+```
+
+
+```{r results='hide', fig.show='hide'}
+plot(workbook1_1$internet_users_total~workbook1_1$Year) + abline(m1_1)
+
+
+```
+
+```{r results='hide', fig.show='hide'}
+plot(workbook1_2$internet_users_total~workbook1_2$Year) + abline(m1_16)
+
+ggplot(workbook1_2, aes(x = Year, y = internet_users_total)) +
+            geom_point() +
+  geom_smooth(method="lm") + 
+  labs(title="Internet User Graph for Age Group 16-24", x="Year", y="User Count")
+```
+
+```{r results='hide', fig.show='hide'}
+plot(workbook1_3$internet_users_total~workbook1_3$Year) + abline(m1_25)
+ggplot(workbook1_3, aes(x = Year, y = internet_users_total)) +
+            geom_point() +
+  geom_smooth(method="lm")+ 
+  labs(title="Internet User Graph for Age Group 25-34", x="Year", y="User Count")
+summary(m1_25)
+
+predict(m1_25, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+plot(workbook1_4$internet_users_total~workbook1_4$Year) + abline(m1_35)
+ggplot(workbook1_4, aes(x = Year, y = internet_users_total)) +
+            geom_point() +
+  geom_smooth(method="lm")+ 
+  labs(title="Internet User Graph for Age Group 35-44", x="Year", y="User Count")
+summary(m1_35)
+
+predict(m1_35, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+plot(workbook1_5$internet_users_total~workbook1_5$Year) + abline(m1_45)
+ggplot(workbook1_5, aes(x = Year, y = internet_users_total)) +
+            geom_point() +
+  geom_smooth(method="lm")+ 
+  labs(title="Internet User Graph for Age Group 45-54", x="Year", y="User Count")
+summary(m1_45)
+
+predict(m1_45, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+plot(workbook1_6$internet_users_total~workbook1_6$Year) + abline(m1_55)
+ggplot(workbook1_6, aes(x = Year, y = internet_users_total)) +
+            geom_point() +
+  geom_smooth(method="lm")+ 
+  labs(title="Internet User Graph for Age Group 55-64", x="Year", y="User Count")
+summary(m1_55)
+
+predict(m1_55, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+plot(workbook1_7$internet_users_total~workbook1_7$Year) + abline(m1_65)
+ggplot(workbook1_7, aes(x = Year, y = internet_users_total)) +
+            geom_point() +
+  geom_smooth(method="lm")+ 
+  labs(title="Internet User Graph for Age Group 65-74", x="Year", y="User Count")
+summary(m1_65)
+
+predict(m1_65, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+plot(workbook1_8$internet_users_total~workbook1_8$Year) + abline(m1_75)
+ggplot(workbook1_8, aes(x = Year, y = internet_users_total)) +
+            geom_point() +
+  geom_smooth(method="lm")+ 
+  labs(title="Internet User Graph for Age Group 75+", x="Year", y="User Count")
+summary(m1_75)
+
+predict(m1_75, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```

@@ -1,0 +1,181 @@
+---
+title: "LSMproj_bs330"
+author: "Bharathprasad Sivaprasad"
+date: "12/12/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+df <- read_excel(here('internet_users_economic.xlsx'))
+```
+
+```{r}
+df1 <- 
+  df %>% 
+  mutate(economic_grp = factor(eco_activity))
+```
+
+```{r}
+df2 <- 
+  df1 %>% 
+  filter(economic_grp == "Employee")
+```
+
+```{r}
+df3 <- 
+  df1 %>% 
+  filter(economic_grp == "Self-employed")
+
+df4 <- 
+  df1 %>% 
+  filter(economic_grp == "Government employment & training programmes")
+
+df5 <- 
+  df1 %>% 
+  filter(economic_grp == "Unpaid family worker")
+
+df6 <- 
+  df1 %>% 
+  filter(economic_grp == "Unemployed")
+
+df7 <- 
+  df1 %>% 
+  filter(economic_grp == "Student")
+
+df8 <- 
+  df1 %>% 
+  filter(economic_grp == "Retired")
+
+df9 <- 
+  df1 %>% 
+  filter(economic_grp == "Inactive")
+```
+
+```{r results='hide', fig.show='hide'}
+m1_eco <- lm(Users ~ Year + economic_grp, data = df1)
+summary(m1_eco)
+```
+
+```{r results='hide', fig.show='hide'}
+m1_Employee <- lm(Users ~ Year, data = df2)
+summary(m1_Employee)
+
+plot(df2$Users~df2$Year) + abline(m1_Employee)
+
+gg_Employee <- ggplot(df2, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_Employee)[[2]], intercept = coef(m1_Employee)[[1]], colour="blue")
+
+gg_Employee + ggtitle("Internet User Graph - Employee ") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_Employee, data.frame(Year=c(2022,2023,2024,2025,2026)))
+
+```
+
+```{r results='hide', fig.show='hide'}
+m1_self <- lm(Users ~ Year, data = df3)
+summary(m1_self)
+
+plot(df3$Users~df3$Year) + abline(m1_self)
+
+gg_self <- ggplot(df3, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_self)[[2]], intercept = coef(m1_self)[[1]], colour="blue")
+
+gg_self + ggtitle("Internet User Graph - Self-employed
+ ") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_self, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_govt <- lm(Users ~ Year, data = df4)
+summary(m1_govt)
+
+plot(df4$Users~df4$Year) + abline(m1_govt)
+
+gg_govt <- ggplot(df4, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_govt)[[2]], intercept = coef(m1_govt)[[1]], colour="blue")
+
+gg_govt + ggtitle("Internet User Graph - Government employment & training programmes") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_govt, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_family <- lm(Users ~ Year, data = df5)
+summary(m1_family)
+
+plot(df5$Users~df5$Year) + abline(m1_family)
+
+gg_family <- ggplot(df5, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_family)[[2]], intercept = coef(m1_family)[[1]], colour="blue")
+
+gg_family + ggtitle("Internet User Graph - Unpaid family worker") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_family, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_Unemployed <- lm(Users ~ Year, data = df6)
+summary(m1_Unemployed)
+
+plot(df6$Users~df6$Year) + abline(m1_Unemployed)
+
+gg_unemployed <- ggplot(df6, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_Unemployed)[[2]], intercept = coef(m1_Unemployed)[[1]], colour="blue")
+
+gg_unemployed + ggtitle("Internet User Graph - Unemployed") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_Unemployed, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_Student <- lm(Users ~ Year, data = df7)
+summary(m1_Student)
+
+plot(df7$Users~df7$Year) + abline(m1_Student)
+
+gg_student <- ggplot(df7, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_Student)[[2]], intercept = coef(m1_Student)[[1]], colour="blue")
+
+gg_student + ggtitle("Internet User Graph - Student") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_Student, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_Retired <- lm(Users ~ Year, data = df8)
+summary(m1_Retired)
+
+plot(df8$Users~df8$Year) + abline(m1_Retired)
+
+gg_retired <- ggplot(df8, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_Retired)[[2]], intercept = coef(m1_Retired)[[1]], colour="blue")
+
+gg_retired + ggtitle("Internet User Graph - Retired") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_Retired, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+```{r results='hide', fig.show='hide'}
+m1_Inactive <- lm(Users ~ Year, data = df9)
+summary(m1_Inactive)
+
+plot(df9$Users~df9$Year) + abline(m1_Inactive)
+
+gg_inactive <- ggplot(df9, aes(x=Year ,y=Users)) + geom_point(size=1.5) + geom_abline(slope = coef(m1_Inactive)[[2]], intercept = coef(m1_Inactive)[[1]], colour="blue")
+
+gg_inactive + ggtitle("Internet User Graph - Inactive") + xlab("Years") + ylab("Users") + theme(plot.title = element_text(face = "bold", hjust = "0.4"))
+
+predict(m1_Inactive, data.frame(Year=c(2022,2023,2024,2025,2026)))
+```
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
